@@ -5,15 +5,19 @@
 		<link>{{ base_url }}</link>
 		<description>RSS feed for {{ site_title }}</description>
 		<atom:link href="{{ base_url }}/feed" rel="self" type="application/rss+xml" />
-		{% for page in pages %}
-			{% if page.date %}
+		{% set count = 0 %} 
+		{% for page in pages|reverse %}
+			{% if page.meta.template == 'post' %}
+			{% if count < 20 %}
 			<item>
 				<title>{{ page.title }}</title>
-				<description><![CDATA[{{ page.content }}]]></description>
+				<description><![CDATA[{{ page.description }}]]></description>
 				<link>{{ page.url }}</link>
 				<pubDate>{{ page.date|date("D, d M Y H:i:s O") }}</pubDate>
 				<guid>{{ page.url }}</guid>
 			</item>
+			{% set count = count + 1 %}
+			{% endif %}
 			{% endif %}
 		{% endfor %}
 	</channel>
